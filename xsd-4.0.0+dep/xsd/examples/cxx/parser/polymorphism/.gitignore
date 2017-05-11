@@ -1,0 +1,6 @@
+# Generated .gitignore file; do not edit or version control.
+#
+driver
+supermen-pskel.hxx
+supermen-pskel.ixx
+supermen-pskel.cxx

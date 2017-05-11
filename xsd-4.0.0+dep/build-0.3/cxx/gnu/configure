@@ -1,0 +1,98 @@
+#! /usr/bin/env bash
+
+# file      : build/cxx/gnu/configure
+# copyright : Copyright (c) 2004-2012 Code Synthesis Tools CC
+# license   : GNU GPL v2; see accompanying LICENSE file
+
+# $1  out file
+# $2  optimize (y/n)
+# $3  cxx_extra_options
+# $4  cxx_ld_extra_options
+#
+# bld_root     - build root
+# project_name - project name
+#
+
+
+source $bld_root/dialog.bash
+
+$echo
+$echo
+$echo "configuring '$project_name'"
+$echo
+$echo
+
+$echo
+$echo "Please enter the g++ binary you would like to use, for example 'g++-3.4',"
+$echo "'/usr/local/bin/g++' or 'distcc g++'."
+$echo
+
+cxx_gnu=`read_path --command g++`
+
+# Determine the C++ standard.
+#
+cxx_gnu_standard=`echo "$3" | sed -e 's/.*-std=\([^ ]*\).*/\1/' -e t -e d`
+
+if [ -z "$cxx_gnu_standard" ]; then
+  cxx_gnu_standard="gnu++98"
+elif [ "$cxx_gnu_standard" = "c++0x" ]; then
+  cxx_gnu_standard="c++11"
+elif [ "$cxx_gnu_standard" = "gnu++0x" ]; then
+  cxx_gnu_standard="gnu++11"
+fi
+
+# Pass cxx_extra_options and cxx_ld_extra_options since those
+# can affect the search paths (e.g., -m32) and target.
+#
+cxx_gnu_libraries=`$cxx_gnu $3 $4 -print-search-dirs | sed -e 's/libraries: =//p' -e d`
+
+cxx_gnu_target=`$cxx_gnu $3 $4 -dumpmachine`
+cxx_gnu_target=`$bld_root/system/config.sub "$cxx_gnu_target"`
+
+if [ $? != 0 ]; then
+  $echo "unable to canonicalize target system '$cxx_gnu_target'"
+  exit 1
+fi
+
+cxx_gnu_target_cpu=`echo $cxx_gnu_target | cut -f 1 -d -`
+cxx_gnu_target_mf=`echo $cxx_gnu_target | cut -f 2 -d -`
+cxx_gnu_target_kernel=`echo $cxx_gnu_target | cut -f 3 -d -`
+cxx_gnu_target_os=`echo $cxx_gnu_target | cut -f 4 -d -`
+
+if [ -z "$cxx_gnu_target_os" ]; then
+
+  # Old format: cpu-mf-os
+  #
+  cxx_gnu_target_os=$cxx_gnu_target_kernel
+  cxx_gnu_target_kernel=
+fi
+
+optimization=
+
+if [ "$2" == "y" ]; then
+
+  $echo
+  $echo "Please select the optimization level you would like to use:"
+  $echo
+  $echo "(1) -O1 [Tries to reduce code size and execution time, without"
+  $echo "         performing any optimizations that take a great deal of"
+  $echo "         compilation time.]"
+  $echo "(2) -O2 [Performs nearly all supported optimizations that do not"
+  $echo "         involve a space-speed tradeoff.]"
+  $echo "(3) -O3 [Optimize even more.]"
+  $echo "(4) -Os [Optimize for size.]"
+  $echo
+
+  optimization=`read_option "-O1 -O2 -O3 -Os" "-O2"`
+
+fi
+
+echo "cxx_gnu := $cxx_gnu"                              > $1
+echo "cxx_gnu_standard := $cxx_gnu_standard"           >> $1
+echo "cxx_gnu_libraries := $cxx_gnu_libraries"         >> $1
+echo "cxx_gnu_optimization_options := $optimization"   >> $1
+echo "cxx_gnu_target := $cxx_gnu_target"               >> $1
+echo "cxx_gnu_target_cpu := $cxx_gnu_target_cpu"       >> $1
+echo "cxx_gnu_target_mf := $cxx_gnu_target_mf"         >> $1
+echo "cxx_gnu_target_kernel := $cxx_gnu_target_kernel" >> $1
+echo "cxx_gnu_target_os := $cxx_gnu_target_os"         >> $1

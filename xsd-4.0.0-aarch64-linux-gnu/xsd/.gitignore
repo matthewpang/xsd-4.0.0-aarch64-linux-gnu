@@ -1,0 +1,15 @@
+# Generated .gitignore file; do not edit or version control.
+#
+xsd
+options.hxx
+cxx/options.hxx
+cxx/tree/options.hxx
+cxx/parser/options.hxx
+options.ixx
+cxx/options.ixx
+cxx/tree/options.ixx
+cxx/parser/options.ixx
+options.cxx
+cxx/options.cxx
+cxx/tree/options.cxx
+cxx/parser/options.cxx

@@ -1,0 +1,2 @@
+include: -I/home/intrinsyc/xsd-4.0.0/libcutl -I/home/intrinsyc/xsd-4.0.0/libcutl
+prefix: xsd-frontend/ /home/intrinsyc/xsd-4.0.0/libxsd-frontend/

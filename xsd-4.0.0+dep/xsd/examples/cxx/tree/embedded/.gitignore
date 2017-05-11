@@ -1,0 +1,9 @@
+# Generated .gitignore file; do not edit or version control.
+#
+driver
+xsdbin
+library.hxx
+library.ixx
+library.cxx
+library-schema.hxx
+library-schema.cxx

@@ -1,0 +1,6 @@
+# Generated .gitignore file; do not edit or version control.
+#
+driver
+email-pskel.hxx
+email-pskel.ixx
+email-pskel.cxx

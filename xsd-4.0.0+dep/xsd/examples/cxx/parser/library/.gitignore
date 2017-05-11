@@ -1,0 +1,6 @@
+# Generated .gitignore file; do not edit or version control.
+#
+driver
+library-pskel.hxx
+library-pskel.ixx
+library-pskel.cxx

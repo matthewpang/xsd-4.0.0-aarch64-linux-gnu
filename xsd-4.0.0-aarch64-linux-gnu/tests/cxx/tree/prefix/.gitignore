@@ -1,0 +1,12 @@
+# Generated .gitignore file; do not edit or version control.
+#
+driver
+test.hxx
+foo.hxx
+bar.hxx
+test.ixx
+foo.ixx
+bar.ixx
+test.cxx
+foo.cxx
+bar.cxx

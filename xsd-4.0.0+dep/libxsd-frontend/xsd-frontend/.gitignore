@@ -1,0 +1,4 @@
+# Generated .gitignore file; do not edit or version control.
+#
+semantic-graph/fundamental.hxx
+semantic-graph/fundamental.cxx

@@ -1,0 +1,9 @@
+# Generated .gitignore file; do not edit or version control.
+#
+test-driver
+test-pskel.hxx
+test-pskel.ixx
+test-pskel.cxx
+test-pimpl.hxx
+test-pimpl.cxx
+test-driver.cxx

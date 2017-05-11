@@ -1,0 +1,7 @@
+# Generated .gitignore file; do not edit or version control.
+#
+driver
+people.hxx
+people-fwd.hxx
+people.ixx
+people.cxx

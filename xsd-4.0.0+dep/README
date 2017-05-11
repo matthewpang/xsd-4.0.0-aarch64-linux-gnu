@@ -1,0 +1,86 @@
+This archive contains pre-configured CodeSynthesis XSD source code
+with all its dependencies (except Xerces-C++). It allows you to build
+the XSD compiler in non-interactive mode (that is, without answering
+any configuration questions).
+
+The following GNU tools are required to build XSD. Any fairly recent
+GNU/Linux distribution should have all of them already installed:
+
+GNU bash >= 2.00   (bash --version)  http://www.gnu.org/software/bash/
+GNU make >= 3.81   (make --version)  http://www.gnu.org/software/make/
+GNU g++  >= 4.2.0  (g++ --version)   http://gcc.gnu.org/
+
+The build system expects you to have the Xerces-C++ library version
+3.0.0 or later built and installed in a location where the C++ compiler
+will find them by default (normally /usr/lib/ and /usr/local/lib/).
+Alternatively, you can provide include (-I) and library (-L) paths
+for this library via the CPPFLAGS and LDFLAGS variables, respectively.
+
+The build system supports the following variables:
+
+CC  	  	  (defaults to gcc if not set)
+CXX               (defaults to g++ if not set)
+AR                (defaults to ar if not set)
+RANLIB            (defaults to ranlib if not set)
+CPPFLAGS
+CFLAGS
+CXXFLAGS
+LDFLAGS
+LIBS
+EXTERNAL_LIBCUTL
+
+For example:
+
+$ make CC=gcc-4.8 CXX=g++-4.8 CFLAGS=-O3 CXXFLAGS=-O3 -j 4
+
+The EXTERNAL_LIBCUTL variable allows you to use an external build
+of libcutl, for example, if you already have this library installed.
+The valid values are 'n' (default) and 'y'.
+
+If you would like to see the full compiler/linker/etc., command lines,
+you can add verbose=1 to the make command line:
+
+$ make verbose=1
+
+After the build is complete, the XSD compiler can be found in the
+xsd/xsd/ sub-directory and the runtime headers in the xsd/libxsd/
+sub-directory. You can install the XSD compiler, runtime library,
+and documentation with the install target, for example:
+
+$ make install_prefix=/usr install
+
+You can fine-tune the installation locations with the following make
+variables:
+
+install_prefix       default is /usr/local
+install_data_prefix  default is install_prefix
+install_exec_prefix  default is install_prefix
+
+install_bin_dir      default is install_exec_prefix/bin
+install_sbin_dir     default is install_exec_prefix/sbin
+install_lib_dir      default is install_exec_prefix/lib
+
+install_data_dir     default is install_data_prefix/share
+install_inc_dir      default is install_data_prefix/include
+
+install_doc_dir      default is install_data_dir/doc
+install_man_dir      default is install_data_dir/man
+install_info_dir     default is install_data_dir/info
+
+You can also create a distribution package with the XSD compiler binary,
+source code for the runtime library and examples, as well as the
+documentation using the dist and dist-win targets, for example:
+
+$ make dist_prefix=/tmp/xsd-x.y.z dist
+
+Or, for Windows:
+
+$ make dist_prefix=/tmp/xsd-x.y.z dist-win
+
+The build system also supports the test and clean targets, for example:
+
+$ make test
+$ make clean
+
+Send bug reports or any other feedback to the xsd-users@codesynthesis.com
+mailing list.

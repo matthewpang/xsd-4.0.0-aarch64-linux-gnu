@@ -1,0 +1,70 @@
+#! /usr/bin/env bash
+
+# file      : build/cxx/intel/configure
+# copyright : Copyright (c) 2004-2012 Code Synthesis Tools CC
+# license   : GNU GPL v2; see accompanying LICENSE file
+
+# $1  out file
+# $2  optimize (y/n)
+# $3  cxx_extra_options
+# $4  cxx_ld_extra_options
+#
+# bld_root     - build root
+# project_name - project name
+#
+
+
+source $bld_root/dialog.bash
+
+$echo
+$echo
+$echo "configuring '$project_name'"
+$echo
+$echo
+
+$echo
+$echo "Please enter the icc binary you would like to use, for example "
+$echo "'/opt/intel_cc_80/bin/icpc'."
+$echo
+
+cxx_intel=`read_path --command icpc`
+
+# Determine the C++ standard. Intel C++ on GNU/Linux appears to use the
+# same option and values as GCC.
+#
+cxx_intel_standard=`echo "$3" | sed -e 's/.*-std=\([^ ]*\).*/\1/' -e t -e d`
+
+if [ -z "$cxx_intel_standard" ]; then
+  cxx_intel_standard="gnu++98"
+elif [ "$cxx_intel_standard" = "c++0x" ]; then
+  cxx_intel_standard="c++11"
+elif [ "$cxx_intel_standard" = "gnu++0x" ]; then
+  cxx_intel_standard="gnu++11"
+fi
+
+# Pass cxx_extra_options and cxx_ld_extra_options since those
+# can affect the search paths (e.g., -m32).
+#
+cxx_intel_libraries=`$cxx_intel $3 $4 -print-search-dirs | sed -e 's/libraries: =//p' -e d`
+
+# Intel optimizes by default.
+#
+optimization=-O0
+
+if [ "$2" == "y" ]; then
+
+  $echo
+  $echo "Please select the optimization level you would like to use:"
+  $echo
+  $echo "(1) -O1 [Enable optimizations.]"
+  $echo "(2) -O2 [Same as -O1.]"
+  $echo "(3) -O3 [As -O2 plus more aggressive optimizations that may not"
+  $echo "         improve performance for all programs.]"
+  $echo
+
+  optimization=`read_option "-O1 -O2 -O3" "-O2"`
+fi
+
+echo "cxx_intel := $cxx_intel"                          > $1
+echo "cxx_intel_libraries := $cxx_intel_libraries"     >> $1
+echo "cxx_intel_optimization_options := $optimization" >> $1
